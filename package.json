@@ -1,0 +1,24 @@
+{
+  "name": "discord-to-blog-eds",
+  "version": "1.0.0",
+  "description": "Discord messages to blog converter using Adobe Edge Delivery Services",
+  "scripts": {
+    "generate": "node scripts/generate-posts.js",
+    "dev": "hlx up",
+    "preview": "hlx up --preview",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^9.1.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@adobe/helix-cli": "^15.6.6",
+    "eslint": "^8.53.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
