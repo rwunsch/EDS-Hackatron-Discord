@@ -4,12 +4,13 @@
   "description": "Discord messages to blog converter using Adobe Edge Delivery Services",
   "scripts": {
     "generate": "node scripts/generate-posts.js",
-    "dev": "hlx up",
-    "preview": "hlx up --preview",
+    "dev": "aem up",
+    "preview": "aem up --preview",
     "lint": "eslint ."
   },
   "dependencies": {
     "discord.js": "^14.13.0",
+    "dotenv": "^16.4.7",
     "gray-matter": "^4.0.3",
     "marked": "^9.1.2",
     "node-fetch": "^2.6.9"
