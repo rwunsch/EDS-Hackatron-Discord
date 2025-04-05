@@ -1,0 +1,60 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# AEM/Helix specific
+.hlx/
+.helix/
+.cache/
+dist/
+build/
+
+# Logs
+logs
+*.log
+lerna-debug.log*
+
+# Testing
+coverage/
+
+# Editor specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.project
+.settings/
+.classpath
+*.sublime-project
+*.sublime-workspace
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional: output generated from the Discord script
+# Uncomment if you want to ignore generated blog posts
+# content/blog/*.md 
