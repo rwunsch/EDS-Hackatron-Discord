@@ -11,7 +11,9 @@ const matter = require('gray-matter');
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const DISCORD_CHANNEL_ID = process.env.DISCORD_CHANNEL_ID;
 const CONTENT_FOLDER = path.join(process.cwd(), 'content/blog');
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Optional, for polishing posts
+const AZURE_OPENAI_API_KEY = process.env.AZURE_OPENAI_API_KEY; // Azure OpenAI API key
+const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT; // Azure OpenAI API endpoint
+const AZURE_OPENAI_DEPLOYMENT = process.env.AZURE_OPENAI_DEPLOYMENT; // Azure OpenAI deployment name
 
 // Ensure output directory exists
 if (!fs.existsSync(CONTENT_FOLDER)) {
@@ -158,42 +160,45 @@ function extractTags(conversation) {
 }
 
 /**
- * Polishes a blog post using AI (optional)
+ * Polishes a blog post using Azure OpenAI (optional)
  * @param {string} content - The blog content
  * @returns {string} - Polished content
  */
 async function polishWithAI(content) {
-  if (!OPENAI_API_KEY) return content;
-  
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful assistant that polishes Discord conversations into coherent blog posts. Maintain the content and substance but improve readability, fix grammar, and organize into paragraphs.'
-          },
-          {
-            role: 'user',
-            content: `Polish this Discord conversation into a well-formatted blog post:\n\n${content}`
-          }
-        ],
-        temperature: 0.7
-      })
-    });
-    
-    const result = await response.json();
-    if (result.choices && result.choices[0] && result.choices[0].message) {
-      return result.choices[0].message.content;
+  // Check if Azure OpenAI configuration is available
+  if (AZURE_OPENAI_API_KEY && AZURE_OPENAI_ENDPOINT && AZURE_OPENAI_DEPLOYMENT) {
+    try {
+      // Azure OpenAI endpoint format: {endpoint}/openai/deployments/{deployment-id}/chat/completions?api-version=2023-05-15
+      const apiUrl = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${AZURE_OPENAI_DEPLOYMENT}/chat/completions?api-version=2023-05-15`;
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': AZURE_OPENAI_API_KEY
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a helpful assistant that polishes Discord conversations into coherent blog posts. Maintain the content and substance but improve readability, fix grammar, and organize into paragraphs.'
+            },
+            {
+              role: 'user',
+              content: `Polish this Discord conversation into a well-formatted blog post:\n\n${content}`
+            }
+          ],
+          temperature: 0.7
+        })
+      });
+      
+      const result = await response.json();
+      if (result.choices && result.choices[0] && result.choices[0].message) {
+        return result.choices[0].message.content;
+      }
+    } catch (error) {
+      console.error('Error using Azure OpenAI API:', error);
     }
-  } catch (error) {
-    console.error('Error using OpenAI API:', error);
   }
   
   return content;
@@ -294,7 +299,7 @@ async function main() {
       let content = formatConversationToMarkdown(conversation);
       
       // Polish with AI if available
-      if (OPENAI_API_KEY) {
+      if (AZURE_OPENAI_API_KEY && AZURE_OPENAI_ENDPOINT && AZURE_OPENAI_DEPLOYMENT) {
         console.log(`Polishing post with AI: ${title}`);
         content = await polishWithAI(content);
       }
