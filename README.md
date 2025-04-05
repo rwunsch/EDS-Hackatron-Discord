@@ -57,12 +57,13 @@ This project automatically converts Discord chat messages into a blog using Adob
    npm install
    ```
 
+   > **Note**: The installation may show some vulnerability warnings related to the Adobe Helix CLI dependencies. These vulnerabilities are present in the local development tools and don't affect the production functionality of the Discord to Blog conversion. For production use, the core functionality (discord.js, gray-matter, marked, node-fetch) is secure.
+
 3. Set up environment variables
-   - For local development, create a `.env` file:
-     ```
-     DISCORD_TOKEN=your_discord_bot_token
-     DISCORD_CHANNEL_ID=your_discord_channel_id
-     OPENAI_API_KEY=your_openai_api_key  # Optional
+   - For local development, copy `.env.example` to `.env` and add your credentials:
+     ```bash
+     cp .env.example .env
+     # Edit the .env file with your actual credentials
      ```
    
    - For GitHub Actions, add these as repository secrets

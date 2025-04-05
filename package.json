@@ -12,13 +12,13 @@
     "discord.js": "^14.13.0",
     "gray-matter": "^4.0.3",
     "marked": "^9.1.2",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^2.6.9"
   },
   "devDependencies": {
-    "@adobe/helix-cli": "^15.6.6",
+    "@adobe/helix-cli": "^14.14.10",
     "eslint": "^8.53.0"
   },
   "engines": {
     "node": ">=18.0.0"
   }
-} 
+}
